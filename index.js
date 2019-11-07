@@ -1,7 +1,7 @@
 const DockerEvents = require('./lib/DockerEvents');
-const Manager = require('./lib/Manager');
+const ProxyManager = require('./lib/ProxyManager');
 
 module.exports = {
   DockerEvents,
-  Manager,
+  ProxyManager,
 };
