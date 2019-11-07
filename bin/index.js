@@ -6,6 +6,7 @@ const Redbird = require('redbird');
 
 const { ProxyManager } = require('../index');
 
+
 const {
   ARP_CERTS_PATH,
   ARP_SOCKET_PATH,
@@ -44,35 +45,39 @@ const argv = require('yargs')
   })
   .argv;
 
-debug(`Connecting to Docker on: ${argv.socketPath} ...`);
-const docker = new Docker({
-  socketPath: argv.socketPath,
-});
+async function main () {
+  debug(`Connecting to Docker on: ${argv.socketPath} ...`);
+  const docker = new Docker({
+    socketPath: argv.socketPath,
+  });
+  
+  debug(
+    `Starting redbird proxy:
+    certsPath: ${argv.certsPath}
+    letsencryptPort: ${argv.letsencryptPort}`,
+  );
+  const redbird = Redbird({
+    port: 80,
+    xfwd: true, // http port is needed for LetsEncrypt challenge during request / renewal. Also enables automatic http->https redirection for registered https routes.
+    letsencrypt: {
+      path: argv.certsPath,
+      port: argv.letsencryptPort, // redbird gets your certificates throug this port
+    },
+    ssl: {
+      http2: true,
+      port: 443, // SSL port used to serve registered https routes with LetsEncrypt certificate.
+      secureOptions: constants.SSL_OP_NO_TLSv1,
+    },
+    bunyan: false, // Disable bunyan
+  });
+  
+  const proxyManager = new ProxyManager({
+    redbird,
+    docker,
+    networkName: argv.networkName,
+  });
+  
+  await proxyManager.start();
+}
 
-debug(
-  `Starting redbird proxy:
-  certsPath: ${argv.certsPath}
-  letsencryptPort: ${argv.letsencryptPort}`,
-);
-const redbird = Redbird({
-  port: 80,
-  xfwd: true, // http port is needed for LetsEncrypt challenge during request / renewal. Also enables automatic http->https redirection for registered https routes.
-  letsencrypt: {
-    path: argv.certsPath,
-    port: argv.letsencryptPort, // redbird gets your certificates throug this port
-  },
-  ssl: {
-    http2: true,
-    port: 443, // SSL port used to serve registered https routes with LetsEncrypt certificate.
-    secureOptions: constants.SSL_OP_NO_TLSv1,
-  },
-  bunyan: false, // Disable bunyan
-});
-
-const proxyManager = new ProxyManager({
-  redbird,
-  docker,
-  networkName: argv.networkName,
-});
-
-proxyManager.start();
+main().catch(err => debug(err.message, err.stack) && process.exit(1));
