@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const { constants } = require('crypto');
 
 const debug = require('debug')('auto-reverse-proxy');

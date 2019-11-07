@@ -1,8 +1,8 @@
 FROM node:lts-alpine
 
-COPY ./* /home/node/
 
 WORKDIR /home/node
+COPY --chown=node:node . ./
 
 RUN npm install --production
 
@@ -18,4 +18,4 @@ EXPOSE 80
 EXPOSE 443
 EXPOSE 9999
 
-CMD [ "node", "bin/index.js"]
+CMD [ "bin/index.js" ]
