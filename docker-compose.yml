@@ -20,6 +20,7 @@ services:
 
     volumes:
       - /var/run/docker.sock/:/var/run/docker.sock
+      #- ./certs:/tmp/certs
 
     ports:
       - '80:80'
