@@ -1,5 +1,6 @@
 FROM node:lts-alpine
 
+RUN apk add --no-cache git
 
 WORKDIR /home/node
 COPY --chown=node:node . ./

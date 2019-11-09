@@ -22,7 +22,7 @@
   "dependencies": {
     "debug": "^4.1.1",
     "dockerode": "^3.0.2",
-    "redbird": "^0.9.1",
+    "redbird": "git+https://github.com/kalvinarts/redbird.git",
     "yargs": "^14.2.0"
   },
   "devDependencies": {
