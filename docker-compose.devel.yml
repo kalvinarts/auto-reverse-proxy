@@ -2,35 +2,30 @@ version: '3'
 
 services:
   auto-revese-proxy:
-    image: kalvinarts/auto-reverse-proxy:latest
+    image: kalvinarts/auto-reverse-proxy:devel
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.devel
 
     restart: unless-stopped
-    command: node --max-http-header-size=131072 bin/index.js
+    command: ./node_modules/.bin/nodemon --inspect bin/index.js
     privileged: true
 
     environment:
-      DEBUG: auto-reverse-proxy,docker-events,proxy-manager
+      DEBUG: auto-reverse-proxy,docker-events,proxy-manager,redbird
       ARP_CERTS_PATH: /tmp/certs
       ARP_SOCKET_PATH: /var/run/docker.sock
-      ARP_NETWORK_NAME: webproxy
+      ARP_NETWORK_NAME: bridge
       ARP_LETSENCRYPT_PORT: 9999
-      ARP_LETSENCRYPT_DEV: 'false'
+      ARP_LETSENCRYPT_DEV: 'true'
 
     volumes:
       - /var/run/docker.sock/:/var/run/docker.sock
+      - ./:/home/node
       #- ./certs:/tmp/certs
 
     ports:
-      - '80:80'
-      - '443:443'
+      - '80:9080'
+      - '443:9443'
       - '9999:9999'
-
-    networks:
-      - webproxy
-
-networks:
-  webproxy:
-    external: true
+      - '9229:9229'
