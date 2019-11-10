@@ -9,6 +9,7 @@ services:
 
     restart: unless-stopped
     command: ./node_modules/.bin/nodemon --inspect bin/index.js
+    tty: true
     privileged: true
 
     environment:
