@@ -13,7 +13,7 @@ services:
     privileged: true
 
     environment:
-      DEBUG: auto-reverse-proxy,docker-events,proxy-manager,redbird
+      DEBUG: auto-reverse-proxy,docker-event-emitter,proxy-manager,redbird
       ARP_CERTS_PATH: /tmp/certs
       ARP_SOCKET_PATH: /var/run/docker.sock
       ARP_NETWORK_NAME: bridge

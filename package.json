@@ -17,19 +17,20 @@
     "build-dev": "docker-compose -f docker-compose.devel.yml build",
     "push": "docker push kalvinarts/auto-reverse-proxy:latest",
     "push-dev": "docker push kalvinarts/auto-reverse-proxy:devel"
-
   },
   "keywords": [],
   "author": "Albert Calbet <kalvinarts@protonmail.com> (https://github.com/kalvinarts)",
   "license": "UNLICENSED",
   "dependencies": {
+    "bunyan": "^1.8.12",
     "debug": "^4.1.1",
+    "docker-event-emitter": "^0.3.0",
     "dockerode": "^3.0.2",
     "redbird": "git+https://github.com/kalvinarts/redbird.git",
     "yargs": "^14.2.0"
   },
   "devDependencies": {
-    "eslint": "^6.6.0",
+    "eslint": "^5.16.0",
     "eslint-config-kalvinarts": "^0.2.0",
     "nodemon": "^1.19.4"
   }

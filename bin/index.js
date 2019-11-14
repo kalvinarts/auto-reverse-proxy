@@ -3,6 +3,7 @@
 const { constants } = require('crypto');
 
 const debug = require('debug')('auto-reverse-proxy');
+const bunyan = require('bunyan');
 const Docker = require('dockerode');
 const Redbird = require('redbird');
 
@@ -82,7 +83,7 @@ async function main () {
       port: 443, // SSL port used to serve registered https routes with LetsEncrypt certificate.
       secureOptions: constants.SSL_OP_NO_TLSv1,
     },
-    bunyan: false, // Disable bunyan
+    // bunyan: false, // Disable bunyan
   });
 
   const proxyManager = new ProxyManager({
